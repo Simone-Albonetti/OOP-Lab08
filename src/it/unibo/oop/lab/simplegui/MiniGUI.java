@@ -10,9 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * This class is a simple application that writes a random number on a file.
@@ -39,14 +41,32 @@ public class MiniGUI {
         frame.setContentPane(canvas);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /*
+         * Ex 01.02
+         */
+        final JTextField txtFld = new JTextField("Result");
+        canvas.add(txtFld, BorderLayout.NORTH);
+        /*
          * Handlers
          */
         write.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                System.out.println(rng.nextInt());
-            }
+                /*
+                 * Ex 01.03
+                 */
+                final String rnd = String.valueOf(rng.nextInt());
+                System.out.println(rnd);
+                txtFld.setText(rnd);
+               }
         });
+        /*
+         * Ex 01.01
+         */
+        final JPanel panel = new JPanel();
+        final BoxLayout box = new BoxLayout(panel, 0);
+        panel.setLayout(box);
+        panel.add(write);
+        canvas.add(panel);
     }
 
     private void display() {
@@ -72,6 +92,7 @@ public class MiniGUI {
          * OK, ready to pull the frame onscreen
          */
         frame.setVisible(true);
+        frame.pack();
     }
 
     /**
