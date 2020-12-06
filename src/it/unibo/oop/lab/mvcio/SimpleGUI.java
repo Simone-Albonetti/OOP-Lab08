@@ -8,7 +8,9 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -67,19 +69,43 @@ public final class SimpleGUI {
         final JPanel panel = new JPanel(new BorderLayout());
         final JButton save = new JButton("Save");
         final JTextArea text = new JTextArea();
+        final JPanel panel2 = new JPanel(new BorderLayout());
+        final JTextArea text2 = new JTextArea();
+        final JButton browse = new JButton("Browse");
+        final Controller controller = new Controller();
+        final JFileChooser fileChooser = new JFileChooser();
         panel.add(save, BorderLayout.SOUTH);
         panel.add(text);
         frame.add(panel);
+        panel2.add(browse, BorderLayout.LINE_END);
+        panel2.add(text2, BorderLayout.CENTER);
+        text2.setText(controller.getFile().toString());
+        text2.setEditable(false);
+        frame.add(panel2, BorderLayout.NORTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         /**
-         * It call the controller, and use saveStringOnFile 
+         * It use the controller and a JFileChooser to change the current file
+         */
+        browse.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    controller.setFile(fileChooser.getSelectedFile().getAbsolutePath());
+                } else {
+                    JOptionPane.showMessageDialog(null, "Errore");
+                }
+                text2.setText(controller.getFile().toString());
+            }
+
+        });
+        /**
+         * It use the controller, and use saveStringOnFile 
          * method's to write on file
          */
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                final Controller controller = new Controller();
                 try {
                     controller.saveStringOnFile(text.getText());
                 } catch (IOException e1) {
