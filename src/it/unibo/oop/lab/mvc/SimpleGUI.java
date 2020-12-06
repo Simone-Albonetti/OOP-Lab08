@@ -1,9 +1,16 @@
 package it.unibo.oop.lab.mvc;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  * A very simple program using a graphical interface.
@@ -38,7 +45,41 @@ public final class SimpleGUI {
      * builds a new {@link SimpleGUI}.
      */
     public SimpleGUI() {
-
+        final JTextField textField = new JTextField();
+        final JTextArea textArea = new JTextArea();
+        final JButton print = new JButton("Print");
+        final JButton history = new JButton("Show history");
+        final JPanel panel = new JPanel(new BorderLayout());
+        final JPanel southPanel = new JPanel(new BorderLayout());
+        final Controller controller = new ControllerImpl();
+        panel.add(textField, BorderLayout.NORTH);
+        panel.add(textArea, BorderLayout.CENTER);
+        southPanel.add(print, BorderLayout.WEST);
+        southPanel.add(history, BorderLayout.EAST);
+        panel.add(southPanel, BorderLayout.SOUTH);
+        frame.add(panel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        /**
+         * When the JButton print is clicked, the controller print on
+         * standard output the nextString
+         */
+        print.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                controller.setNextString(textField.getText());
+                controller.printString();
+            }
+        });
+        history.addActionListener(new ActionListener() {
+            /**
+             * When the JButton history is clicked, the textArea show
+             * the string's history
+             */
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                textArea.setText(controller.getHistoryString().toString()); 
+            }
+        });
         /*
          * Make the frame half the resolution of the screen. This very method is
          * enough for a single screen setup. In case of multiple monitors, the
@@ -60,6 +101,10 @@ public final class SimpleGUI {
          * on screen. Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
-    }
+        frame.setVisible(true);
 
+    }
+    public static void main(final String[] s) {
+        new SimpleGUI();
+    }
 }
